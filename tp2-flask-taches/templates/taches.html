@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block titre %}Ma liste de tâches - {{ super() }}{% endblock %}
+
+{% block contenu %}
+<h1>Mes tâches</h1>
+<ul>
+    {% for t in taches %}
+        <li>
+            {{ loop.index }}.
+            {% if t.terminee %}
+                <s>{{ t.titre }}</s>
+            {% else %}
+                {{ t.titre }}
+                <form method="post" action="{{ url_for('terminer', id=t.id) }}">
+                    <button type="submit">Terminer</button>
+                </form>
+            {% endif %}
+            — Priorité : {{ t.priorite }}
+            <form method="post" action="{{ url_for('supprimer', id=t.id) }}">
+                <button type="submit">Supprimer</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+<p>Tâches restantes : {{ taches|rejectattr("terminee")|list|length }}</p>
+{% endblock %}
